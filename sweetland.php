@@ -26,14 +26,13 @@
                         <li><a href="sweetland.php">Домашняя страница</a></li>
                         <li><a href="sweets.php">Сладости</a></li>
                         <li><a href="about-us.php">О сладостях</a></li>
-                        <li><a href="account.php">Аккаунт</a></li>
+                        
 
                         <?php if (isset($_SESSION["userName"])) { ?><li><a href="logout.php">Выйти</a></li>
                         <?php } ?>
                     </ul>
                 </nav>
                 <a href="cart.php"><img src="Images/cart.png" width="30px" height="30px"></a>
-                <img src="Images/menu.png" class="menu-icon" onclick="menutoggle()">
 
             </div>
             <div class="row">

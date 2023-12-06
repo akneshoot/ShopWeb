@@ -24,12 +24,11 @@
 				<li><a href="sweetland.php">Домашняя страница</a></li>
 				<li><a href="sweets.php">Сладости</a></li>
 				<li><a href="about-us.php">О сладостях</a></li>
-				<li><a href="account.php">Аккаунт</a></li>
 			<?php if(isset($_SESSION["userName"])){ ?><li><a href="logout.php">Выйти</a></li> <?php } ?>
 			</ul>
 		</nav>
 		<a href="cart.php"><img src="Images/cart.png" width="30px" height="30px"></a>
-        <img src="Images/menu.png" class="menu-icon" onclick="menutoggle()">
+
 		</div>
 	
 	</div>
@@ -73,6 +72,7 @@
 	</div>
     <?php 
 
+
 session_start();
 
 if (isset($_POST["regSubmit"])) {
@@ -83,12 +83,21 @@ if (isset($_POST["regSubmit"])) {
     $con = mysqli_connect("localhost", "root", "root", "sweetland");
 
     if (!$con) {
-        die("Извините, но у вас проблемы");
+        die(json_encode(["error" => "Ошибка подключения"]));
     }
 
-    $sql = "SELECT registerFunction('$userName', '$email', '$password')";
-    mysqli_query($con, $sql);
-    header('Location: account.php');
+    $sql = "SELECT registerFunction('$userName', '$email', '$password') AS newCustomerId";
+    $result = mysqli_query($con, $sql);
+
+    if ($result) {
+        $row = mysqli_fetch_assoc($result);
+        $newCustomerId = $row["newCustomerId"];
+        echo json_encode(["newCustomerId" => $newCustomerId]);
+		header('Location: sweetland.php');
+    } else {
+        echo json_encode(["error" => "Ошибка регистрации."]);
+    }
+
     mysqli_close($con);
 }
 
@@ -99,7 +108,7 @@ if (isset($_POST["loginSubmit"])) {
     $con = mysqli_connect("localhost", "root", "root", "sweetland");
 
     if (!$con) {
-        die("Ошибка");
+        die(json_encode(["error" => "Ошибка подключения"]));
     }
 
     $sql = "CALL loginProcedure('$userName1', '$password1')";
@@ -107,16 +116,19 @@ if (isset($_POST["loginSubmit"])) {
 
     if (mysqli_num_rows($results) > 0) {
         $_SESSION["userName"] = $userName1;
-        header('Location: sweetland.php');
+		header('Location: sweetland.php');
+       
         if ($userName1 == 'admin@gmail.com') {
             header('Location: admin.php');
         }
     } else {
-        echo "Введите правильный пароль";
+        echo json_encode(["error" => "Неправильные введенные данные"]);
     }
+
     mysqli_close($con);
 }
 ?>
+
 
 	
 

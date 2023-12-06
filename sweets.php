@@ -1,9 +1,6 @@
 <?php
 session_start();
 
-if (!isset($_SESSION["userName"])) {
-    header('Location: account.php');
-}
 ?>
 
 <!DOCTYPE html>
@@ -33,12 +30,11 @@ if (!isset($_SESSION["userName"])) {
                         <li><a href="sweetland.php">Домашняя страница</a></li>
                         <li><a href="sweets.php">Сладости</a></li>
                         <li><a href="about-us.php">О сладостях</a></li>
-                        <li><a href="account.php">Аккаунт</a></li>
+                        
                         <?php if (isset($_SESSION["userName"])) { ?><li><a href="logout.php">Выйти</a></li><?php } ?>
                     </ul>
                 </nav>
 				<a href="cart.php"><img src="Images/cart.png" width="30px" height="30px"></a>
-                <img src="Images/menu.png" class="menu-icon" onclick="menutoggle()">
 
             </div>
 
@@ -132,17 +128,22 @@ if (!isset($_SESSION["userName"])) {
 
             $result = mysqli_query($con, $sql);
 
-            while ($row = mysqli_fetch_assoc($result)) {
+            if (mysqli_num_rows($result) > 0) {
+                while ($row = mysqli_fetch_assoc($result)) {
             ?>
-                <div class="col-4">
-                    <a href="sweet-details.php?id=<?php echo $row['sweetId']; ?>"><img src="<?php echo $row['imagePath']; ?>"></a>
-                    <h4><?php echo $row['sweetName']; ?>
-                        <p>Категория: <?php echo getCategoryName($con, $row['id_category']); ?></p>
-                        <p>Производитель: <?php echo getMakerName($con, $row['id_maker']); ?></p>
-                        <h4><?php echo $row['price']; ?> Руб.</h4>
-                </div>
+                    <div class="col-4">
+                        <a href="sweet-details.php?id=<?php echo $row['sweetId']; ?>"><img src="<?php echo $row['imagePath']; ?>"></a>
+                        <h4><?php echo $row['sweetName']; ?>
+                            <p>Категория: <?php echo getCategoryName($con, $row['id_category']); ?></p>
+                            <p>Производитель: <?php echo getMakerName($con, $row['id_maker']); ?></p>
+                            <h4><?php echo $row['price']; ?> Руб.</h4>
+                    </div>
             <?php
+                }
+            } else {
+                echo "<h2>Товары не найдены.</h2>";
             }
+        
             mysqli_close($con);
 
             function getCategoryName($con, $categoryId)

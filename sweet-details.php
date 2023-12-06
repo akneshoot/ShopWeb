@@ -1,9 +1,7 @@
 <?php
 session_start();
 
-if (!isset($_SESSION["userName"])) {
-    header('Location:account.php');
-}
+
 ?>
 
 <!DOCTYPE html>
@@ -20,28 +18,30 @@ if (!isset($_SESSION["userName"])) {
 </head>
 
 <body>
+    <div class="header">
+        <div class="container">
+            <div class="navbar">
+                <div class="logo">
+                    <a href="sweetland.php"><img src="Images/sweetLand - Logo (Black).png" width="125px"></a>
+                </div>
 
-    <div class="container">
-        <div class="navbar">
-            <div class="logo">
-                <a href="sweetland.php"><img src="Images/sweetLand - Logo (Black).png" width="125px"></a>
+                <nav>
+                    <ul id="MenuItems">
+                        <li><a href="sweetland.php">Домашняя страница</a></li>
+                        <li><a href="sweets.php">Сладости</a></li>
+                        <li><a href="about-us.php">О сладостях</a></li>
+
+                        <?php if (isset($_SESSION["userName"])) { ?><li><a href="logout.php">Выйти</a></li><?php } ?>
+                    </ul>
+                </nav>
+                <a href="cart.php"><img src="Images/cart.png" width="30px" height="30px"></a>
             </div>
-
-            <nav>
-                <ul id="MenuItems">
-                    <li><a href="sweetland.php">Домашняя страница</a></li>
-                    <li><a href="sweets.php">Сладости</a></li>
-                    <li><a href="about-us.php">О сладостях</a></li>
-                    <li><a href="account.php">Аккаунт</a></li>
-                    <?php if (isset($_SESSION["userName"])) { ?><li><a href="logout.php">Выйти</a></li><?php } ?>
-                </ul>
-            </nav>
-            <a href="cart.php"><img src="Images/cart.png" width="30px" height="30px"></a>
-            <img src="Images/menu.png" class="menu-icon" onclick="menutoggle()">
         </div>
     </div>
 
     <?php
+    
+    
     $con = mysqli_connect("localhost", "root", "root", "sweetland");
 
     if (!$con) {
@@ -81,7 +81,13 @@ if (!isset($_SESSION["userName"])) {
         </div>
 
     <?php
+    
         if (isset($_POST["buy"])) {
+            session_start();
+        
+            if (!isset($_SESSION["userName"])) {
+                header('Location: account.php');
+        }
             $quantity = $_POST["quantity"];
             if ($quantity <= 0) {
                 ?>
