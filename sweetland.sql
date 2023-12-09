@@ -82,6 +82,10 @@ INSERT INTO `order` (`orderId`, `payment`, `customerEmail`, `sweetId`, `quantity
 (2, 2000, 'nastosanastos@gmail.com', 6, 1),
 (3, 2000, 'ahaha@gmail.com', 1, 1);
 
+ALTER TABLE `order`
+ADD COLUMN `orderDate` TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
+
+
 
 
 ALTER TABLE `category`

@@ -114,15 +114,11 @@
             <input type="file" name="fileImage" id="multiImage_file" />
             <br><br>
             <input type="submit" name="btnSubmit" class="button" id="btnSubmit" value="Добавить">
-            <input type="submit" name="btnExit" class="button" id="btnExit" value="Выйти на главную страницу">
         </form>
     </div>
 
     </div>
     <?php
-    if (isset($_POST["btnExit"])) {
-        header('Location:sweetland.php');
-    }
 
     if (isset($_POST["btnSubmit"])) {
         $sName = $_POST["sname"];
@@ -166,23 +162,24 @@
         header('Location:admin.php');
     }
 
-	if(isset($_POST["btnEdit"]))
-{
-    $sweetIdToEdit = $_POST["sweetIdToEdit"];
-    
+    if (isset($_POST["btnEdit"])) {
+        $sweetIdToEdit = $_POST["sweetIdToEdit"];
+    ?>
+        <form action="admin.php" method="post">
+            <label for="newPrice">Новая цена:</label>
+            <input type="text" id="newPrice" name="newPrice" required>
+            <label for="newStock">Новое количество:</label>
+            <input type="text" id="newStock" name="newStock" required>
+            <input type="hidden" name="sweetIdToEdit" value="<?php echo $sweetIdToEdit; ?>">
+            <input type="submit" name="btnChange" value="Изменить">
+        </form><?php }
 
-    echo '<form action="admin.php" method="post">
-              <label for="newPrice">Новая цена:</label>
-              <input type="text" id="newPrice" name="newPrice" required>
-              <input type="hidden" name="sweetIdToEdit" value="' . $sweetIdToEdit . '">
-              <input type="submit" name="btnChangePrice" value="Изменить цену">
-          </form>';
-}
 
-	if(isset($_POST["btnChangePrice"]))
+	if(isset($_POST["btnChange"]))
 	{
     	$sweetIdToEdit = $_POST["sweetIdToEdit"];
     	$newPrice = $_POST["newPrice"];
+        $newStock = $_POST["newStock"];
     	$con = mysqli_connect("localhost", "root", "root", "sweetland");
     	if(!$con)
     	{
@@ -194,8 +191,8 @@
     	$previousPrice = $rowPreviousPrice['price'];
 		$sqlUpdatePrice = "UPDATE `sweet` SET `price` = $newPrice WHERE `sweetId` = $sweetIdToEdit";
 		mysqli_query($con, $sqlUpdatePrice);
-		echo "Цена успешно изменена! Предыдущая цена: $previousPrice, Новая цена: $newPrice";
-	
+        $sqlUpdateStock = "UPDATE `sweet` SET `stock` = $newStock WHERE `sweetId` = $sweetIdToEdit";
+        mysqli_query($con, $sqlUpdateStock);
 		mysqli_close($con);
 		header('Location:admin.php');
 	}
@@ -276,7 +273,7 @@
         </table>
         <table id="order-table">
             <tr>
-                <th>Номер заказа</th>
+                <th>Дата заказа</th>
 
                 <th>Оплата</th>
                 <th>Почта заказчика</th>
@@ -301,7 +298,7 @@
             ?>
 
                     <tr>
-                        <td><?php echo $row['orderId']; ?></td>
+                        <td><?php echo $row['orderDate']; ?></td>
                         <td><?php echo $row['payment']; ?></td>
                         <td><?php echo $row['customerEmail']; ?></td>
                         <td><?php echo $row['sweetId']; ?></td>

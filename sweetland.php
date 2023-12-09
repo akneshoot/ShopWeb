@@ -59,7 +59,7 @@
                 $con = mysqli_connect("localhost", "root", "root", "sweetland");
 
                 if (!$con) {
-                    die("Sorry, Technical error");
+                    die("Извините, технические проблемы");
                 }
 
                 $sql = "SELECT * FROM `sweet` limit 6";

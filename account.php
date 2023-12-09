@@ -75,17 +75,52 @@
 
 session_start();
 
+function isValidUsername($username) {
+    return strlen($username) >= 4 && !preg_match('/[!|?]/', $username);
+}
+
+function isValidPassword($password) {
+    return strlen($password) >= 8 && preg_match('/\d/', $password) && preg_match('/[!@#$%^&*(),.?":{}|<>]/', $password);
+}
+
 if (isset($_POST["regSubmit"])) {
     $userName = $_POST["username"];
     $email = $_POST["email"];
     $password = $_POST["password"];
 
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        echo json_encode(["error" => "Incorrect mail format"]);
+        exit;
+    }
+
+    $emailParts = explode('@', $email);
+    $domain = $emailParts[1];
+
+    if ($emailParts[0] === '' || strlen($emailParts[0]) < 4 || !in_array($domain, ['gmail.com', 'mail.ru', 'yandex.ru'])) {
+        echo json_encode(["error" => "Incorrect mail format"]);
+        exit;
+    }
+
+    if (!isValidUsername($userName) || !isValidPassword($password)) {
+        echo json_encode(["error" => "Invalid username or password format"]);
+        exit;
+    }
+
     $con = mysqli_connect("localhost", "root", "root", "sweetland");
 
     if (!$con) {
-        die(json_encode(["error" => "Ошибка подключения"]));
+        die(json_encode(["error" => "Connection error"]));
     }
 
+    $checkEmailQuery = "SELECT * FROM `customer` WHERE `email` = '$email'";
+    $checkEmailResult = mysqli_query($con, $checkEmailQuery);
+
+    if (mysqli_num_rows($checkEmailResult) > 0) {
+        echo json_encode(["error" => "Email already exists"]);
+        exit;
+    }
+
+    // Proceed with registration if the email is not found
     $sql = "SELECT registerFunction('$userName', '$email', '$password') AS newCustomerId";
     $result = mysqli_query($con, $sql);
 
@@ -93,13 +128,14 @@ if (isset($_POST["regSubmit"])) {
         $row = mysqli_fetch_assoc($result);
         $newCustomerId = $row["newCustomerId"];
         echo json_encode(["newCustomerId" => $newCustomerId]);
-		header('Location: sweetland.php');
+        header('Location: account.php');
     } else {
-        echo json_encode(["error" => "Ошибка регистрации."]);
+        echo json_encode(["error" => "Registration error"]);
     }
 
     mysqli_close($con);
 }
+
 
 if (isset($_POST["loginSubmit"])) {
     $userName1 = $_POST["email1"];
@@ -107,8 +143,9 @@ if (isset($_POST["loginSubmit"])) {
 
     $con = mysqli_connect("localhost", "root", "root", "sweetland");
 
-    if (!$con) {
-        die(json_encode(["error" => "Ошибка подключения"]));
+    if (!isValidPassword($password1)) {
+        echo json_encode(["error" => "Invalid password format"]);
+        exit;
     }
 
     $sql = "CALL loginProcedure('$userName1', '$password1')";
@@ -122,7 +159,7 @@ if (isset($_POST["loginSubmit"])) {
             header('Location: admin.php');
         }
     } else {
-        echo json_encode(["error" => "Неправильные введенные данные"]);
+        echo json_encode(["error" => "The entered data is incorrect"]);
     }
 
     mysqli_close($con);
