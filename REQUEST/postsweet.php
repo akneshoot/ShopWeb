@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         $conn = new mysqli($db_host, $db_user, $db_pass, $db_name);
         if ($conn->connect_error) {
-            die("Connection failed: " . $conn->connect_error);
+            die("Ошибка подключения: " . $conn->connect_error);
         }
         $sweetName = $conn->real_escape_string($data['sweetName']);
         $stock = (int)$data['stock'];
@@ -25,17 +25,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $query = "INSERT INTO sweet (sweetName, stock, id_maker, id_category, imagePath, price, description, weight) VALUES ('$sweetName', $stock, $id_maker, $id_category, '$imagePath', $price, '$description', $weight)";
         
         if ($conn->query($query) === TRUE) {
-            $response = array('status' => 'success', 'message' => 'Sweet added successfully');
+            $response = array('status' => 'success', 'message' => 'Товар успешно добавлен');
         } else {
-            $response = array('status' => 'error', 'message' => 'Error adding sweet: ' . $conn->error);
+            $response = array('status' => 'error', 'message' => 'Ошибка добавления: ' . $conn->error);
         }
         
         $conn->close();
     } else {
-        $response = array('status' => 'error', 'message' => 'Missing required fields');
+        $response = array('status' => 'error', 'message' => 'Отсутствуют обязательные поля');
     }
 } else {
-    $response = array('status' => 'error', 'message' => 'Invalid request method');
+    $response = array('status' => 'error', 'message' => 'Неверный метод запроса');
 }
 
 echo json_encode($response);

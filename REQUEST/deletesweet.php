@@ -9,7 +9,7 @@ $dbname = "sweetland";
 $conn = new mysqli($servername, $username, $password, $dbname);
 
 if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+    die("Соединение не удалось: " . $conn->connect_error);
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
@@ -18,18 +18,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
     $sweetIdToDelete = isset($data['sweetId']) ? intval($data['sweetId']) : 0;
 
     if ($sweetIdToDelete > 0) {
-        $sql = "DELETE FROM sweet WHERE sweetId = $sweetIdToDelete";
+        $checkSql = "SELECT * FROM sweet WHERE sweetId = $sweetIdToDelete";
+        $result = $conn->query($checkSql);
 
-        if ($conn->query($sql) === TRUE) {
-            echo json_encode(array("message" => "Sweet deleted successfully"));
+        if ($result->num_rows > 0) {
+            $deleteSql = "DELETE FROM sweet WHERE sweetId = $sweetIdToDelete";
+            if ($conn->query($deleteSql) === TRUE) {
+                echo json_encode(array("message" => "Товар успешно удален"));
+            } else {
+                echo json_encode(array("error" => "Ошибка удаления: " . $conn->error));
+            }
         } else {
-            echo json_encode(array("error" => "Error deleting sweet: " . $conn->error));
+            echo json_encode(array("error" => "Товар с указанным SweetId не найден"));
         }
     } else {
-        echo json_encode(array("error" => "Invalid or missing sweetId parameter"));
+        echo json_encode(array("error" => "Недопустимый или отсутствующий параметр SweetId"));
     }
 } else {
-    echo json_encode(array("error" => "Invalid request method"));
+    echo json_encode(array("error" => "Неверный метод запроса"));
 }
 
 $conn->close();

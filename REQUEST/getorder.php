@@ -7,7 +7,7 @@ $dbname = "sweetland";
 $conn = new mysqli($servername, $username, $password, $dbname);
 
 if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+    die("Ошибка подключения: " . $conn->connect_error);
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
@@ -26,10 +26,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
             echo json_encode($cartItems);
         } else {
-            echo json_encode(array('message' => 'No items in the shopping cart for this user.'));
+            echo json_encode(array('message' => 'Для этого пользователя в корзине нет товаров.'));
         }
     } else {
-        echo json_encode(array('message' => 'Invalid request. Please provide a user email.'));
+        echo json_encode(array('message' => 'Неверный запрос. Укажите адрес электронной почты пользователя.'));
     }
 }
 $conn->close();

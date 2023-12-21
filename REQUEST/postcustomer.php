@@ -6,7 +6,7 @@ $database = "sweetland";
 $conn = new mysqli($host, $username, $password, $database);
 
 if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+    die("Ошибка подключения: " . $conn->connect_error);
 }
 
 function isValidUsername($username) {
@@ -23,14 +23,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = $data['username'];
     $email = $data['email'];
     $password = $data['password'];
+    $checkEmailQuery = "SELECT * FROM `customer` WHERE `email` = '$email'";
+    $resultEmail = $conn->query($checkEmailQuery);
+
+    if ($resultEmail->num_rows > 0) {
+        $response = array("status" => "error", "message" => "Пользователь с таким email уже существует");
+        header('Content-Type: application/json');
+        echo json_encode($response);
+        exit;
+    }
+
     if (!isValidUsername($username)) {
-        $response = array("status" => "error", "message" => "Invalid username");
+        $response = array("status" => "error", "message" => "Неверное имя пользователя");
         header('Content-Type: application/json');
         echo json_encode($response);
         exit;
     }
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $response = array("status" => "error", "message" => "Invalid email format");
+        $response = array("status" => "error", "message" => "Неверный формат электронной почты");
         header('Content-Type: application/json');
         echo json_encode($response);
         exit;
@@ -39,13 +49,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $domain = $emailParts[1];
 
     if ($emailParts[0] === '' || strlen($emailParts[0]) < 4 || !in_array($domain, ['gmail.com', 'mail.ru', 'yandex.ru'])) {
-        $response = array("status" => "error", "message" => "Invalid email format. Minimum 4 characters before the domain, and valid domain options are: gmail.com, mail.ru, yandex.ru");
+        $response = array("status" => "error", "message" => "Неверный формат электронной почты. Минимум 4 символа перед доменом. Допустимые варианты домена: gmail.com, mail.ru, yandex.ru.");
         header('Content-Type: application/json');
         echo json_encode($response);
         exit;
     }
     if (!isValidPassword($password)) {
-        $response = array("status" => "error", "message" => "Invalid password");
+        $response = array("status" => "error", "message" => "Неверный пароль");
         header('Content-Type: application/json');
         echo json_encode($response);
         exit;
@@ -54,9 +64,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->bind_param("sss", $username, $email, $password);
 
     if ($stmt->execute()) {
-        $response = array("status" => "success", "message" => "User added successfully");
+        $response = array("status" => "success", "message" => "Пользователь успешно добавлен");
     } else {
-        $response = array("status" => "error", "message" => "Failed to add user");
+        $response = array("status" => "error", "message" => "Не удалось добавить пользователя");
     }
     $stmt->close();
     header('Content-Type: application/json');

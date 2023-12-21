@@ -12,26 +12,51 @@ if ($_SERVER["REQUEST_METHOD"] === "DELETE") {
 
         $conn = new mysqli($servername, $username, $password, $dbname);
         if ($conn->connect_error) {
-            die("Connection failed: " . $conn->connect_error);
+            die("Соединение не удалось: " . $conn->connect_error);
         }
-        $stmt = $conn->prepare("DELETE FROM `order` WHERE `customerEmail` = ? AND `sweetId` = ?");
-        $stmt->bind_param("si", $data['customerEmail'], $data['sweetId']);
-        if ($stmt->execute()) {
-            $response = array('success' => true, 'message' => 'Product deleted from the cart');
-            echo json_encode($response);
+        $userCheckStmt = $conn->prepare("SELECT * FROM `customer` WHERE `email` = ?");
+        $userCheckStmt->bind_param("s", $data['customerEmail']);
+        $userCheckStmt->execute();
+        $userCheckStmt->store_result();
+
+        if ($userCheckStmt->num_rows > 0) {
+            $checkStmt = $conn->prepare("SELECT * FROM `order` WHERE `customerEmail` = ? AND `sweetId` = ?");
+            $checkStmt->bind_param("si", $data['customerEmail'], $data['sweetId']);
+            $checkStmt->execute();
+            $checkStmt->store_result();
+
+            if ($checkStmt->num_rows > 0) {
+                $deleteStmt = $conn->prepare("DELETE FROM `order` WHERE `customerEmail` = ? AND `sweetId` = ?");
+                $deleteStmt->bind_param("si", $data['customerEmail'], $data['sweetId']);
+
+                if ($deleteStmt->execute()) {
+                    $response = array('success' => true, 'message' => 'Товар удален из корзины');
+                    echo json_encode($response);
+                } else {
+                    $response = array('success' => false, 'message' => 'Не удалось удалить товар из корзины');
+                    echo json_encode($response);
+                }
+
+                $deleteStmt->close();
+            } else {
+                $response = array('success' => false, 'message' => 'Товар не найден в корзине');
+                echo json_encode($response);
+            }
+
+            $checkStmt->close();
         } else {
-            $response = array('success' => false, 'message' => 'Failed to delete product from the cart');
+            $response = array('success' => false, 'message' => 'Пользователь не найден');
             echo json_encode($response);
         }
-        $stmt->close();
+
+        $userCheckStmt->close();
         $conn->close();
     } else {
-        $response = array('success' => false, 'message' => 'Invalid data provided');
+        $response = array('success' => false, 'message' => 'Предоставлены неверные данные');
         echo json_encode($response);
     }
 } else {
     http_response_code(405); 
-    echo json_encode(array('error' => 'Invalid request method'));
+    echo json_encode(array('error' => 'Неверный метод запроса'));
 }
-
 ?>

@@ -7,7 +7,7 @@ $database = "sweetland";
 $conn = new mysqli($servername, $username, $password, $database);
 
 if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+    die("Ошибка подключения: " . $conn->connect_error);
 }
 
 $sql = "SELECT * FROM sweet";
@@ -21,7 +21,7 @@ if ($result->num_rows > 0) {
     header('Content-Type: application/json');
     echo json_encode($sweets, JSON_PRETTY_PRINT);
 } else {
-    echo "No sweets found";
+    echo "Товар не найден";
 }
 
 $conn->close();
