@@ -1,2 +1,2 @@
-# SweetShopWeb
+# ShopWeb
 Курсовая работа по "РСЧИР"
