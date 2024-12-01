@@ -99,34 +99,53 @@ quadrantChart
 ```
 
 ```mermaid
-```mermaid
 gitGraph
-   commit id: "Начальный коммит"
-   branch feature/добавление-книг
-   checkout feature/добавление-книг
-   commit id: "Добавлена модель книги"
-   commit id: "Добавлен репозиторий для книг"
-   branch feature/добавление-авторов
-   checkout feature/добавление-авторов
-   commit id: "Добавлена модель автора"
-   commit id: "Связаны книги с авторами"
+   commit id: "Инициализация проекта"
+   branch dev
+   checkout dev
+   commit id: "Добавлена структура проекта"
+   commit id: "Создан каталог книг"
+   
+   branch feature/catalog-filtering
+   checkout feature/catalog-filtering
+   commit id: "Реализована фильтрация книг"
+   checkout dev
+   merge feature/catalog-filtering id: "Мердж фильтрации книг"
+   
+   branch feature/registration
+   checkout feature/registration
+   commit id: "Создана форма регистрации"
+   commit id: "Добавлена валидация регистрации"
+   checkout dev
+   merge feature/registration id: "Мердж регистрации"
+   
+   branch feature/login
+   checkout feature/login
+   commit id: "Реализован вход пользователя"
+   checkout dev
+   merge feature/login id: "Мердж входа пользователя"
+   
+   branch feature/shopping-cart
+   checkout feature/shopping-cart
+   commit id: "Создана корзина товаров"
+   commit id: "Добавлено добавление/удаление книг в корзину"
+   checkout dev
+   merge feature/shopping-cart id: "Мердж корзины товаров"
+   
+   branch feature/checkout
+   checkout feature/checkout
+   commit id: "Реализовано оформление заказа"
+   checkout dev
+   merge feature/checkout id: "Мердж оформления заказа"
+   
+   branch feature/delivery
+   checkout feature/delivery
+   commit id: "Добавлена доставка книг"
+   commit id: "Настроен расчет доставки"
+   checkout dev
+   merge feature/delivery id: "Мердж доставки"
+   
    checkout main
-   merge feature/добавление-книг id: "Слияние добавления книг"
-   branch feature/управление-корзиной
-   checkout feature/управление-корзиной
-   commit id: "Добавлена модель корзины"
-   commit id: "Добавлен репозиторий для корзины"
-   checkout main
-   merge feature/управление-корзиной id: "Слияние управления корзиной"
-   checkout feature/добавление-авторов
-   commit id: "Улучшена связь книги и автора"
-   checkout main
-   merge feature/добавление-авторов id: "Слияние добавления авторов"
-   branch feature/отзывы
-   checkout feature/отзывы
-   commit id: "Добавлена модель отзывов"
-   commit id: "Добавлена возможность оставлять отзывы"
-   checkout main
-   merge feature/отзывы id: "Слияние отзывов"
+   merge dev id: "Релиз готового магазина"
 
 ```
