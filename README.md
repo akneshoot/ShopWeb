@@ -1,9 +1,9 @@
-
-
-```mermaid
 # Книжный магазин
 
 ## Mindmap
+
+```mermaid
+
 
 mermaid
 mindmap
