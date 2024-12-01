@@ -99,36 +99,34 @@ quadrantChart
 ```
 
 ```mermaid
+```mermaid
 gitGraph
-    commit id: "Инициализация проекта"
-    branch feature/авторизация
-    checkout feature/авторизация
-    commit id: "Реализация авторизации"
-    commit id: "Добавление валидации входа"
-    checkout main
-    merge feature/авторизация
-    branch feature/каталог_книг
-    checkout feature/каталог_книг
-    commit id: "Создание структуры каталога"
-    commit id: "Добавление поиска и фильтрации"
-    checkout main
-    merge feature/каталог_книг
-    branch feature/корзина
-    checkout feature/корзина
-    commit id: "Добавление функционала корзины"
-    commit id: "Обновление интерфейса корзины"
-    checkout main
-    merge feature/корзина
-    branch feature/оплата
-    checkout feature/оплата
-    commit id: "Интеграция с платежной системой"
-    commit id: "Тестирование оплаты"
-    checkout main
-    merge feature/оплата
-    branch feature/рекомендации
-    checkout feature/рекомендации
-    commit id: "Добавление рекомендательной системы"
-    checkout main
-    merge feature/рекомендации
+   commit id: "Начальный коммит"
+   branch feature/добавление-книг
+   checkout feature/добавление-книг
+   commit id: "Добавлена модель книги"
+   commit id: "Добавлен репозиторий для книг"
+   branch feature/добавление-авторов
+   checkout feature/добавление-авторов
+   commit id: "Добавлена модель автора"
+   commit id: "Связаны книги с авторами"
+   checkout main
+   merge feature/добавление-книг id: "Слияние добавления книг"
+   branch feature/управление-корзиной
+   checkout feature/управление-корзиной
+   commit id: "Добавлена модель корзины"
+   commit id: "Добавлен репозиторий для корзины"
+   checkout main
+   merge feature/управление-корзиной id: "Слияние управления корзиной"
+   checkout feature/добавление-авторов
+   commit id: "Улучшена связь книги и автора"
+   checkout main
+   merge feature/добавление-авторов id: "Слияние добавления авторов"
+   branch feature/отзывы
+   checkout feature/отзывы
+   commit id: "Добавлена модель отзывов"
+   commit id: "Добавлена возможность оставлять отзывы"
+   checkout main
+   merge feature/отзывы id: "Слияние отзывов"
 
 ```
