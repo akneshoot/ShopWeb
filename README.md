@@ -211,9 +211,7 @@ gitGraph
    checkout dev
    merge feature/checkout id: "Мердж оформления заказа"
    
-   branch feature
-
-/delivery
+   branch feature/delivery
    checkout feature/delivery
    commit id: "Добавлена доставка книг"
    commit id: "Настроен расчет доставки"
@@ -222,6 +220,7 @@ gitGraph
    
    checkout main
    merge dev id: "Релиз готового магазина"
+
 ```
 
 ### Пояснение
