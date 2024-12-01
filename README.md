@@ -100,35 +100,35 @@ quadrantChart
 
 ```mermaid
 gitGraph
-    commit id: "Создание репозитория проекта"
-    branch frontend
-    checkout frontend
-    commit id: "Разработка интерфейса каталога книг"
+    commit id: "Инициализация проекта"
+    branch feature/авторизация
+    checkout feature/авторизация
+    commit id: "Реализация авторизации"
+    commit id: "Добавление валидации входа"
+    checkout main
+    merge feature/авторизация
+    branch feature/каталог_книг
+    checkout feature/каталог_книг
+    commit id: "Создание структуры каталога"
+    commit id: "Добавление поиска и фильтрации"
+    checkout main
+    merge feature/каталог_книг
+    branch feature/корзина
+    checkout feature/корзина
     commit id: "Добавление функционала корзины"
-    branch backend
-    checkout backend
-    commit id: "Настройка сервера и API"
+    commit id: "Обновление интерфейса корзины"
+    checkout main
+    merge feature/корзина
+    branch feature/оплата
+    checkout feature/оплата
     commit id: "Интеграция с платежной системой"
+    commit id: "Тестирование оплаты"
     checkout main
-    merge frontend id: "v0.1.0 - Интерфейс готов"
-    merge backend id: "v0.2.0 - Базовая серверная часть"
-    branch search-feature
-    checkout search-feature
-    commit id: "Добавление поиска по названию и автору"
-    commit id: "Фильтрация по категориям и рейтингу"
+    merge feature/оплата
+    branch feature/рекомендации
+    checkout feature/рекомендации
+    commit id: "Добавление рекомендательной системы"
     checkout main
-    merge search-feature id: "v0.3.0 - Улучшенный поиск"
-    branch user-auth
-    checkout user-auth
-    commit id: "Реализация регистрации и входа"
-    commit id: "Добавление восстановления пароля"
-    checkout main
-    merge user-auth id: "v0.4.0 - Авторизация готова"
-    branch release
-    checkout release
-    commit id: "Тестирование перед выпуском"
-    checkout main
-    merge release id: "v1.0.0 - Первый релиз"
-    commit id: "Устранение багов после релиза"
-    commit id: "Добавление рекомендаций книг"
+    merge feature/рекомендации
+
 ```
