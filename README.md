@@ -3,9 +3,6 @@
 ## Mindmap
 
 ```mermaid
-
-
-mermaid
 mindmap
   root((Книжный магазин))
     Клиентская_часть
