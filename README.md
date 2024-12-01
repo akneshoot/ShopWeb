@@ -96,7 +96,39 @@ quadrantChart
     "Рекомендованные книги": [0.15, 0.15]
     "Сохранение книг в избранное": [0.75, 0.25]
     "Рассылка email-уведомлений": [0.30, 0.20]
-
-
 ```
 
+```mermaid
+gitGraph
+    commit id: "Создание репозитория проекта"
+    branch frontend
+    checkout frontend
+    commit id: "Разработка интерфейса каталога книг"
+    commit id: "Добавление функционала корзины"
+    branch backend
+    checkout backend
+    commit id: "Настройка сервера и API"
+    commit id: "Интеграция с платежной системой"
+    checkout main
+    merge frontend id: "v0.1.0 - Интерфейс готов"
+    merge backend id: "v0.2.0 - Базовая серверная часть"
+    branch search-feature
+    checkout search-feature
+    commit id: "Добавление поиска по названию и автору"
+    commit id: "Фильтрация по категориям и рейтингу"
+    checkout main
+    merge search-feature id: "v0.3.0 - Улучшенный поиск"
+    branch user-auth
+    checkout user-auth
+    commit id: "Реализация регистрации и входа"
+    commit id: "Добавление восстановления пароля"
+    checkout main
+    merge user-auth id: "v0.4.0 - Авторизация готова"
+    branch release
+    checkout release
+    commit id: "Тестирование перед выпуском"
+    checkout main
+    merge release id: "v1.0.0 - Первый релиз"
+    commit id: "Устранение багов после релиза"
+    commit id: "Добавление рекомендаций книг"
+```
